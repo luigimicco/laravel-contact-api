@@ -31,11 +31,11 @@ class ContactController extends Controller
                 'message' => 'required'
             ],
             [
-                'name.required' => 'Il nome è obbligatorio.',
-                'subject.required' => 'L\'oggetto è obbligatorio.',
-                'email.required' => 'La mail è obbligatoria.',
-                'email.email' => 'L\'indirizzo email non è valido.',
-                'message.required' => 'Il testo del messaggio è obbligatorio.'
+                'name.required' => 'Il nome è obbligatorio [da Laravel].',
+                'subject.required' => 'L\'oggetto è obbligatorio [da Laravel].',
+                'email.required' => 'La mail è obbligatoria [da Laravel].',
+                'email.email' => 'L\'indirizzo email non è valido [da Laravel].',
+                'message.required' => 'Il testo del messaggio è obbligatorio [da Laravel].'
             ]
         );
 

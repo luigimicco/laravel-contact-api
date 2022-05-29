@@ -2389,6 +2389,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_Loader_vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../components/Loader.vue */ "./resources/js/components/Loader.vue");
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
 /* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_1__);
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -2528,11 +2534,54 @@ __webpack_require__.r(__webpack_exports__);
       this.alert = true;
     },
     sendForm: function sendForm() {
+      var _this = this;
+
       // console.log(this.form);
       // * Richiamo validateForm
       this.validateForm(); // Controllo se ci sono errori
 
-      if (!this.hasErrors) {}
+      if (!this.hasErrors) {
+        // * Creo una variabile per recuperare i params
+        // Posso usare anche lo spread
+        var params = _objectSpread({}, this.form); // * Chiamo axios in POST per mandare i dati e gli passo params
+        // potrei passare direttamente this.form perchè i campi COINCIDONO
+
+
+        axios.post("./api/contact", params).then(function (res) {
+          // Controllo se comunque mi arrivano errori DAL BACKEND
+          if (res.data.errors) {
+            // Prendo gli errori DA LARAVEL e li metto comunque dentro errors
+            var _res$data$errors = res.data.errors,
+                name = _res$data$errors.name,
+                email = _res$data$errors.email,
+                subject = _res$data$errors.subject,
+                message = _res$data$errors.message;
+            var errors = {};
+            if (name) errors.name = name[0];
+            if (email) errors.email = email[0];
+            if (subject) errors.subject = subject[0];
+            if (message) errors.message = message[0];
+            _this.errors = errors;
+            _this.type = "danger";
+            _this.alert = true;
+          } else {
+            _this.form.name = "";
+            _this.form.email = "";
+            _this.form.subject = "";
+            _this.form.message = "";
+            _this.alertMessage = "Messaggio inviato con successo.";
+            _this.alert = true;
+            _this.type = "success";
+          }
+        })["catch"](function (err) {
+          // console.error(err.response.status);
+          _this.alertMessage = "'Messaggio non inviato. Si è verificato un errore. Riprovare più tardi";
+          _this.alert = true;
+          _this.type = "danger";
+        }).then(function () {
+          _this.isLoading = false;
+        });
+      }
     }
   }
 });

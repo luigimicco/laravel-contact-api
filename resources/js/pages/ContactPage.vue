@@ -151,7 +151,50 @@ export default {
       // Controllo se ci sono errori
       if (!this.hasErrors) {
 
+        // * Creo una variabile per recuperare i params
+        // Posso usare anche lo spread
+        const params = {
+          ...this.form,
+        };
 
+				// * Chiamo axios in POST per mandare i dati e gli passo params
+				// potrei passare direttamente this.form perchè i campi COINCIDONO
+				axios
+					.post("./api/contact", params)
+					.then((res) => {
+						// Controllo se comunque mi arrivano errori DAL BACKEND
+						if (res.data.errors) {
+							// Prendo gli errori DA LARAVEL e li metto comunque dentro errors
+							const { name, email, subject, message } = res.data.errors;
+							const errors = {};
+							if (name) errors.name = name[0];
+							if (email) errors.email = email[0];
+							if (subject) errors.subject = subject[0];
+							if (message) errors.message = message[0];
+							this.errors = errors;
+							this.type = "danger";
+							this.alert = true;
+						} else {
+							this.form.name = "";
+							this.form.email = "";
+							this.form.subject = "";
+							this.form.message = "";
+							this.alertMessage = "Messaggio inviato con successo.";
+							this.alert = true;
+              this.type = "success";
+							
+						}
+					})
+					.catch((err) => {
+						// console.error(err.response.status);
+
+            this.alertMessage = "'Messaggio non inviato. Si è verificato un errore. Riprovare più tardi";
+            this.alert = true;
+            this.type = "danger";
+					})
+					.then(() => {
+						this.isLoading = false;
+					});
 
       }
     },  

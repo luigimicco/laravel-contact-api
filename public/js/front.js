@@ -2529,20 +2529,23 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       if (this.form.email.trim() && !this.form.email.match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) errors.email = "La mail non è valida";
       this.errors = errors;
-      this.alertMessage = "Sono presenti degli errori.";
-      this.type = "danger";
-      this.alert = true;
+
+      if (this.hasErrors) {
+        this.alertMessage = "Sono presenti degli errori.";
+        this.type = "danger";
+        this.alert = true;
+      }
     },
     sendForm: function sendForm() {
       var _this = this;
 
-      // console.log(this.form);
       // * Richiamo validateForm
       this.validateForm(); // Controllo se ci sono errori
 
       if (!this.hasErrors) {
-        // * Creo una variabile per recuperare i params
+        this.isLoading = true; // * Creo una variabile per recuperare i params
         // Posso usare anche lo spread
+
         var params = _objectSpread({}, this.form); // * Chiamo axios in POST per mandare i dati e gli passo params
         // potrei passare direttamente this.form perchè i campi COINCIDONO
 

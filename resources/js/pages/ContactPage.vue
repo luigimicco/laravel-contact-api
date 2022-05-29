@@ -137,20 +137,21 @@ export default {
 				errors.email = "La mail non è valida";
 
 			this.errors = errors;
-      this.alertMessage = "Sono presenti degli errori.";
-      this.type = "danger";
-			this.alert = true;
+      if (this.hasErrors) {
+        this.alertMessage = "Sono presenti degli errori.";
+        this.type = "danger";
+        this.alert = true;
+      }
 
 		},
 		sendForm() {
-			// console.log(this.form);
 
 			// * Richiamo validateForm
 			this.validateForm();
 
       // Controllo se ci sono errori
       if (!this.hasErrors) {
-
+        this.isLoading = true;  
         // * Creo una variabile per recuperare i params
         // Posso usare anche lo spread
         const params = {

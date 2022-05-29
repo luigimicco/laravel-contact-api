@@ -8,6 +8,7 @@ use App\Mail\SendNewMail;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class ContactController extends Controller
 {
@@ -47,6 +48,13 @@ class ContactController extends Controller
         $contact->fill($data);
         $contact->save();
         
-        return response('Mail sent successfully', 204); // o return response('Mail received', 201)
+        //$data['email'] = "";
+        $mail = new SendNewMail($data);
+        try {
+            Mail::to(env('MAIL_ADMIN_ADDRESS'))->send($mail); // MAIL_ADMIN_ADDRESS è stata aggiunta nel file ENV
+            return response('Email inviata con successo', 204); // o return response('Mail received', 201)
+        } catch (ModelNotFoundException  $exception) {
+            return response('Messaggio non inviato. Si è verificato un errore. Riprovare più tardi [da Laravel]', 204); // o return response('Mail received', 201)
+        }
     }
 }

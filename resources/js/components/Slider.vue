@@ -5,31 +5,16 @@
     @mouseleave="startAutoPlay"
   >
     <ol class="carousel-indicators">
-      <li
-        v-for="(item, index) in items"
-        :key="index"
-        :class="{ active: isCurrent(index) }"
-        @click="setCurrent(index)"
-      ></li>
+      <li v-for="(item, index) in items" :key="index" :class="{ active: isCurrent(index) }" @click="setCurrent(index)"></li>
     </ol>
     <div class="carousel-inner text-center">
-      <div
-        v-for="(item, index) in items"
-        :key="index"
-        class="carousel-item"
-        :class="{ active: currentSlide == index }"
-      >
+      <div v-for="(item, index) in items" :key="index" class="carousel-item" :class="{ active: currentSlide == index }">
         <img class="d-block w-100" :src="item.img" />
         <div class="container">
           <div class="carousel-caption text-left">
             <h1>{{ item.title }}</h1>
             <p class="d-none d-md-block">{{ item.caption }}</p>
-            <a
-              class="btn btn-lg btn-primary d-none d-md-inline"
-              :href="item.button.url"
-              role="button"
-              >{{ item.button.caption }}</a
-            >
+            <a class="btn btn-lg btn-primary d-none d-md-inline" :href="item.button.url" role="button" >{{ item.button.caption }}</a>
           </div>
         </div>
       </div>

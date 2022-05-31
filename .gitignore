@@ -1,7 +1,7 @@
 /node_modules
 /public/hot
 /public/js
-public/js/front.js
+/public/js/front.js
 /public/css
 /public/storage
 /storage/*.key
@@ -13,4 +13,4 @@ Homestead.json
 Homestead.yaml
 npm-debug.log
 yarn-error.log
-public/js/front.js
+
